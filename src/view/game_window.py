@@ -6,10 +6,8 @@ class GameWindow(tk.Toplevel):
         super().__init__(parent)
         # self.parent = parent
         self.controller = controller
-        self.game_window_exists = False
 
     def create_memory_window(self):
-        self.game_window_exists = True
         self.geometry("600x600")
         self.title("Playboard")
 
@@ -19,9 +17,5 @@ class GameWindow(tk.Toplevel):
 
         # close the application
         self.btn_quit = tk.Button(
-            self, text="Back", command=self.delete_game_window
+            self, text="Back", command=self.controller.delete_game_window
         ).grid(row=2, column=0, ipadx=20)
-
-    def delete_game_window(self):
-        self.game_window_exists = False
-        self.destroy()

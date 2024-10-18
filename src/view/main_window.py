@@ -11,7 +11,6 @@ class MainWindow(tk.Tk):
     def __init__(self):
         super().__init__()
         self.controller = None
-        self.start_window = None
 
     def set_controller(self, controller):
         self.controller = controller

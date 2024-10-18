@@ -1,3 +1,3 @@
 class Model:
     def __init__(self):
-        pass
+        self.memory_window_is_open = False
