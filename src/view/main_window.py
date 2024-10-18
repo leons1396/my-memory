@@ -22,7 +22,7 @@ class MainWindow(tk.Tk):
         self.rowconfigure(3, weight=1)
 
         self.btn_start = tk.Button(
-            self, text="Start", command=self.controller.create_memory_window
+            self, text="Start", command=self.controller.create_game_window
         ).grid(row=1, column=0, ipadx=20)
         self.btn_quit = tk.Button(self, text="Quit", command=self.quit).grid(
             row=2, column=0, ipadx=20

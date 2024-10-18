@@ -7,7 +7,7 @@ class GameWindow(tk.Toplevel):
         # self.parent = parent
         self.controller = controller
 
-    def create_memory_window(self):
+    def create_game_window(self):
         self.geometry("600x600")
         self.title("Playboard")
 

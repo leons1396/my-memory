@@ -14,14 +14,14 @@ class Controller:
     def start(self):
         self.main_window.create_start_window()
 
-    def create_memory_window(self):
+    def create_game_window(self):
         # make sure only one game window is open
-        if not self.model.memory_window_is_open:
+        if not self.model.game_window_is_open:
             print("Create game window")
             # self = controller itself
-            self.memory_window = game_window.GameWindow(self, self.main_window)
-            self.memory_window.create_memory_window()
-            self.model.memory_window_is_open = True
+            self.game_window = game_window.GameWindow(self, self.main_window)
+            self.game_window.create_game_window()
+            self.model.game_window_is_open = True
 
             # hide the start/root window
             self.main_window.withdraw()
@@ -31,6 +31,6 @@ class Controller:
     def delete_game_window(self):
         # show the start/root window
         self.main_window.deiconify()
-        self.memory_window.destroy()
-        self.model.memory_window_is_open = False
+        self.game_window.destroy()
+        self.model.game_window_is_open = False
         print("Game window deleted")
