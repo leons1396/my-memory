@@ -33,4 +33,7 @@ class Controller:
         self.main_window.deiconify()
         self.game_window.destroy()
         self.model.game_window_is_open = False
-        print("Game window deleted")
+
+    def set_difficulty_lvl(self, lvl):
+        self.model.set_difficulty_level(lvl)
+        self.main_window.set_difficulty_level(lvl)

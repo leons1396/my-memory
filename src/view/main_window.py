@@ -20,7 +20,10 @@ class MainWindow(tk.Tk):
 
     def create_start_window(self):
         MAX_PLAYERS = 4
-        self.geometry("300x300")
+        NUM_DIFFICULTY_LEVELS = 3
+        DIFFICULTY_LEVELS = ["easy", "medium", "hard"]
+        self.geometry("600x600")
+
         # self.columnconfigure(4, weight=1)
         self.rowconfigure(0, weight=1)
         self.rowconfigure(4, weight=1)
@@ -41,6 +44,31 @@ class MainWindow(tk.Tk):
         self.btn_quit = tk.Button(self, text="Quit", command=self.quit)
         self.btn_quit.grid(row=8, column=2, ipadx=20)
 
+        # with a separate frame for each button you can highlight the selected button
+        self.frame_btn_difficulties = [
+            tk.Frame(
+                self,
+                highlightthickness=2,
+                bd=0,
+                relief="raised",
+                borderwidth=3,
+            )
+            for _ in range(NUM_DIFFICULTY_LEVELS)
+        ]
+        for i, frame in enumerate(self.frame_btn_difficulties, 1):
+            frame.grid(row=5, column=i)
+
+        self.btn_difficulties = [
+            tk.Button(
+                frame,
+                text=lvl.title(),
+                command=lambda lvl=lvl: self.controller.set_difficulty_lvl(lvl),
+            )
+            for frame, lvl in zip(self.frame_btn_difficulties, DIFFICULTY_LEVELS)
+        ]
+        for btn in self.btn_difficulties:
+            btn.pack(fill="both", expand=True)
+
         # ========================== Labels ============================
         self.lbl_title_num_players = tk.Label(self, text="Number of players")
         self.lbl_title_num_players.grid(row=1, column=0)
@@ -53,6 +81,9 @@ class MainWindow(tk.Tk):
         ]
         for i, lbl_player in enumerate(self.lbl_players, 0):
             lbl_player.grid(row=2, column=i)
+
+        self.lbl_difficulty = tk.Label(self, text="Difficulty")
+        self.lbl_difficulty.grid(row=5, column=0)
 
         # ========================== Entries ============================
         self.txt_players = [tk.Entry(self) for i in range(MAX_PLAYERS)]
@@ -97,3 +128,13 @@ class MainWindow(tk.Tk):
             else:
                 lbl_player.config(state="disabled")
                 txt_player.config(state="disabled")
+
+    def set_difficulty_level(self, lvl):
+        print("Clicked Button: ", lvl)
+        map_lvl = {"easy": 0, "medium": 1, "hard": 2}[lvl]
+        # loop over btns and frames. if idx == map_lvl than set red else set default
+        for i, frame in enumerate(self.frame_btn_difficulties):
+            if i == map_lvl:
+                frame.config(highlightbackground="red", relief="sunken")
+            else:
+                frame.config(highlightbackground="black", relief="raised")
