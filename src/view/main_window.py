@@ -47,32 +47,23 @@ class MainWindow(tk.Tk):
 
         self.lbl_show_num_players = tk.Label(self, textvariable=self.lbl_num_players)
         self.lbl_show_num_players.grid(row=1, column=1)
-        # self.lbl_player1 = tk.Label(self, text="Player 1").grid(row=2, column=0)
-        # self.lbl_player2 = tk.Label(self, text="Player 2").grid(row=2, column=1)
-        # self.lbl_player3 = tk.Label(self, text="Player 3").grid(row=2, column=2)
-        # self.lbl_player4 = tk.Label(self, text="Player 4").grid(row=2, column=3)
+
         self.lbl_players = [
             tk.Label(self, text=f"Player {i}") for i in range(1, MAX_PLAYERS + 1)
         ]
         for i, lbl_player in enumerate(self.lbl_players, 0):
             lbl_player.grid(row=2, column=i)
-        print(self.lbl_players)
-        # ========================== Entries ============================
-        # self.txt_player1 = tk.Entry(self).grid(row=3, column=0)
-        # self.txt_player2 = tk.Entry(self).grid(row=3, column=1)
-        # self.txt_player3 = tk.Entry(self).grid(row=3, column=2)
-        # self.txt_player4 = tk.Entry(self).grid(row=3, column=3)
 
+        # ========================== Entries ============================
         self.txt_players = [tk.Entry(self) for i in range(MAX_PLAYERS)]
         for i, txt_player in enumerate(self.txt_players, 0):
             txt_player.grid(row=3, column=i)
         self.update_player_from_board(count=int(self.lbl_num_players.get()))
 
     def increase(self):
-        # update label num_players
+        """Increase the number of players by 1 controlled by the plus button."""
         self.update()
         count = int(self.lbl_num_players.get())
-        print("COUNT in INCREASE", count)
         if count < 4:
             new_count = count + 1
             self.lbl_num_players.set(new_count)
@@ -80,13 +71,11 @@ class MainWindow(tk.Tk):
         else:
             messagebox.showinfo(title="Info", message="Max number of players reached")
 
-        # for each player, add a new label and entry field
-
     def decrease(self):
+        """Decrease the number of players by 1 controlled by the minus button."""
         # update label num_players
         self.update()
         count = int(self.lbl_num_players.get())
-        print("COUNT in DECREASE", count)
         if count > 1:
             new_count = count - 1
             self.lbl_num_players.set(new_count)
@@ -97,13 +86,11 @@ class MainWindow(tk.Tk):
             )
 
     def update_player_from_board(self, count):
-        # update the player labels and entry fields
-        print("Count in update_player_from_board", count)
+        """Enables and disables the player labels and entry fields based on the
+        number of players."""
         for i, (lbl_player, txt_player) in enumerate(
             zip(self.lbl_players, self.txt_players), 1
         ):
-            print(lbl_player)
-            print(txt_player)
             if i <= count:
                 lbl_player.config(state="normal")
                 txt_player.config(state="normal")
