@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 import sys
 
 sys.path.append("C:/Users/Leon/Documents/programming/MY-MEMORY")
@@ -11,19 +12,101 @@ class MainWindow(tk.Tk):
     def __init__(self):
         super().__init__()
         self.controller = None
+        self.lbl_num_players = tk.StringVar()
+        self.lbl_num_players.set("1")
 
     def set_controller(self, controller):
         self.controller = controller
 
     def create_start_window(self):
-        self.geometry("600x600")
-        self.columnconfigure(0, weight=1)
+        MAX_PLAYERS = 4
+        self.geometry("300x300")
+        # self.columnconfigure(4, weight=1)
         self.rowconfigure(0, weight=1)
-        self.rowconfigure(3, weight=1)
+        self.rowconfigure(4, weight=1)
+        self.rowconfigure(6, weight=1)
+
+        # ========================== Buttons ============================
+        self.btn_minus = tk.Button(self, text="-", command=self.decrease)
+        self.btn_minus.grid(row=1, column=3)
+
+        self.btn_plus = tk.Button(self, text="+", command=self.increase)
+        self.btn_plus.grid(row=1, column=4)
 
         self.btn_start = tk.Button(
             self, text="Start", command=self.controller.create_game_window
-        ).grid(row=1, column=0, ipadx=20)
-        self.btn_quit = tk.Button(self, text="Quit", command=self.quit).grid(
-            row=2, column=0, ipadx=20
         )
+        self.btn_start.grid(row=7, column=2, ipadx=20)
+
+        self.btn_quit = tk.Button(self, text="Quit", command=self.quit)
+        self.btn_quit.grid(row=8, column=2, ipadx=20)
+
+        # ========================== Labels ============================
+        self.lbl_title_num_players = tk.Label(self, text="Number of players")
+        self.lbl_title_num_players.grid(row=1, column=0)
+
+        self.lbl_show_num_players = tk.Label(self, textvariable=self.lbl_num_players)
+        self.lbl_show_num_players.grid(row=1, column=1)
+        # self.lbl_player1 = tk.Label(self, text="Player 1").grid(row=2, column=0)
+        # self.lbl_player2 = tk.Label(self, text="Player 2").grid(row=2, column=1)
+        # self.lbl_player3 = tk.Label(self, text="Player 3").grid(row=2, column=2)
+        # self.lbl_player4 = tk.Label(self, text="Player 4").grid(row=2, column=3)
+        self.lbl_players = [
+            tk.Label(self, text=f"Player {i}") for i in range(1, MAX_PLAYERS + 1)
+        ]
+        for i, lbl_player in enumerate(self.lbl_players, 0):
+            lbl_player.grid(row=2, column=i)
+        print(self.lbl_players)
+        # ========================== Entries ============================
+        # self.txt_player1 = tk.Entry(self).grid(row=3, column=0)
+        # self.txt_player2 = tk.Entry(self).grid(row=3, column=1)
+        # self.txt_player3 = tk.Entry(self).grid(row=3, column=2)
+        # self.txt_player4 = tk.Entry(self).grid(row=3, column=3)
+
+        self.txt_players = [tk.Entry(self) for i in range(MAX_PLAYERS)]
+        for i, txt_player in enumerate(self.txt_players, 0):
+            txt_player.grid(row=3, column=i)
+        self.update_player_from_board(count=int(self.lbl_num_players.get()))
+
+    def increase(self):
+        # update label num_players
+        self.update()
+        count = int(self.lbl_num_players.get())
+        print("COUNT in INCREASE", count)
+        if count < 4:
+            new_count = count + 1
+            self.lbl_num_players.set(new_count)
+            self.update_player_from_board(new_count)
+        else:
+            messagebox.showinfo(title="Info", message="Max number of players reached")
+
+        # for each player, add a new label and entry field
+
+    def decrease(self):
+        # update label num_players
+        self.update()
+        count = int(self.lbl_num_players.get())
+        print("COUNT in DECREASE", count)
+        if count > 1:
+            new_count = count - 1
+            self.lbl_num_players.set(new_count)
+            self.update_player_from_board(new_count)
+        else:
+            messagebox.showinfo(
+                title="Info", message="Number of players have to be greater than 1"
+            )
+
+    def update_player_from_board(self, count):
+        # update the player labels and entry fields
+        print("Count in update_player_from_board", count)
+        for i, (lbl_player, txt_player) in enumerate(
+            zip(self.lbl_players, self.txt_players), 1
+        ):
+            print(lbl_player)
+            print(txt_player)
+            if i <= count:
+                lbl_player.config(state="normal")
+                txt_player.config(state="normal")
+            else:
+                lbl_player.config(state="disabled")
+                txt_player.config(state="disabled")
