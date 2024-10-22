@@ -138,3 +138,11 @@ class MainWindow(tk.Tk):
                 frame.config(highlightbackground="red", relief="sunken")
             else:
                 frame.config(highlightbackground="black", relief="raised")
+
+    def get_player_names_from_user(self):
+        # return player_names
+        return [
+            txt_player.get()
+            for txt_player in self.txt_players
+            if txt_player.cget("state") == "normal"
+        ]

@@ -20,7 +20,9 @@ class Controller:
             print("Create game window")
             # self = controller itself
             self.game_window = game_window.GameWindow(self, self.main_window)
-            self.game_window.create_game_window()
+            self.model.set_player_names(self.main_window.get_player_names_from_user())
+            print("++++ game setting model", self.model.get_game_setting())
+            self.game_window.create_game_window(**self.model.get_game_setting())
             self.model.game_window_is_open = True
 
             # hide the start/root window
