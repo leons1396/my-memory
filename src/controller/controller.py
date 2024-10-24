@@ -94,3 +94,4 @@ class Controller:
     def update_scores(self, player_name, player_idx):
         score = self.model.get_and_update_score(name=player_name)
         self.game_window.update_player_score(player_idx=player_idx, score=score)
+        self.game_window.update_remaining_score()

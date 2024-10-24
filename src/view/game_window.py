@@ -37,13 +37,13 @@ class GameWindow(tk.Toplevel):
             self.frame_rem_pairs,
             text="Remaining pairs: ",
             font=("Arial", 20, "bold"),
-            fg="green",
+            fg="blue",
         )
         self.lbl_num_rem_pairs = tk.Label(
             self.frame_rem_pairs,
             text=int(num_cards / 2),
             font=("Arial", 20, "bold"),
-            bg="green",
+            fg="blue",
         )
         self.lbl_rem_pairs.grid(row=0, column=0)
         self.lbl_num_rem_pairs.grid(row=0, column=1, sticky=tk.W)
@@ -136,3 +136,8 @@ class GameWindow(tk.Toplevel):
 
     def update_player_score(self, player_idx: int, score: int) -> None:
         self.lbl_num_pairs_players[player_idx].config(text=str(score))
+
+    def update_remaining_score(self) -> None:
+        rem_pairs = int(self.lbl_num_rem_pairs.cget("text"))
+        rem_pairs -= 1
+        self.lbl_num_rem_pairs.config(text=str(rem_pairs))
