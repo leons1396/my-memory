@@ -10,6 +10,7 @@ class Model:
         self.count_open_cards = 0
         self.temp_card_idx = []
         self.count_player = 0
+        self.scores = {}
 
     def set_difficulty_level(self, lvl: str):
         self.difficulty_level = lvl
@@ -33,6 +34,10 @@ class Model:
 
     def get_temp_card_idx(self) -> list:
         return self.temp_card_idx
+
+    def init_scores(self):
+        for player in self.player_names:
+            self.scores[player] = 0
 
     def are_two_cards_open(self) -> bool:
         self.count_open_cards += 1
@@ -74,3 +79,17 @@ class Model:
         else:
             # take next player
             self.count_player += 1
+
+    def set_default(self):
+        self.game_window_is_open = False
+        self.difficulty_level = None
+        self.player_names = None
+        self.card_values = None
+        self.count_open_cards = 0
+        self.temp_card_idx = []
+        self.count_player = 0
+        self.scores = {}
+
+    def get_and_update_score(self, name: str) -> int:
+        self.scores[name] += 1
+        return self.scores[name]

@@ -15,7 +15,7 @@ class GameWindow(tk.Toplevel):
 
     def create_game_window(self, num_cards, num_players, player_names):
         # TODO may set the size based on the number of cards
-        self.geometry("1500x1500")
+        self.geometry("1300x1300")
         self.title("Playboard")
 
         # ========================== Buttons ============================
@@ -33,22 +33,38 @@ class GameWindow(tk.Toplevel):
         self.create_cards(num_cards)
         # ========================== Labels ============================
         self.frame_rem_pairs = tk.Frame(self)
-        self.lbl_rem_pairs = tk.Label(self.frame_rem_pairs, text="Remaining pairs: ")
+        self.lbl_rem_pairs = tk.Label(
+            self.frame_rem_pairs,
+            text="Remaining pairs: ",
+            font=("Arial", 20, "bold"),
+            fg="green",
+        )
+        self.lbl_num_rem_pairs = tk.Label(
+            self.frame_rem_pairs,
+            text=int(num_cards / 2),
+            font=("Arial", 20, "bold"),
+            bg="green",
+        )
         self.lbl_rem_pairs.grid(row=0, column=0)
+        self.lbl_num_rem_pairs.grid(row=0, column=1, sticky=tk.W)
+        self.frame_rem_pairs.grid(row=0, column=0, sticky=tk.W)
 
         # set player names in another frame
         self.frame_players = tk.Frame(self)
         self.lbl_players = []
+        self.lbl_num_pairs_players = []
         for i, player in enumerate(player_names):
             lbl = tk.Label(self.frame_players, text=player, font=("Arial", 20, "bold"))
+            lbl_num = tk.Label(
+                self.frame_players, text="0", font=("Arial", 20, "bold"), bg="yellow"
+            )
             self.lbl_players.append(lbl)
+            self.lbl_num_pairs_players.append(lbl_num)
             lbl.grid(row=i, column=0)
+            lbl_num.grid(row=i, column=1)
         self.frame_players.grid(row=2, column=0, sticky=tk.W)
 
         # ========================== Entries ============================
-        self.txt_rem_pairs = tk.Entry(self.frame_rem_pairs)
-        self.txt_rem_pairs.grid(row=0, column=1)
-        self.frame_rem_pairs.grid(row=0, column=0, sticky=tk.W)
 
     def create_cards(self, num_cards):
         """Create the memory grid with the desired number of cards. The values for each
@@ -117,3 +133,6 @@ class GameWindow(tk.Toplevel):
                 lbl.config(fg="green")
             else:
                 lbl.config(fg="black")
+
+    def update_player_score(self, player_idx: int, score: int) -> None:
+        self.lbl_num_pairs_players[player_idx].config(text=str(score))

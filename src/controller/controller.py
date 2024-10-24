@@ -27,7 +27,7 @@ class Controller:
             self.model.game_window_is_open = True
             # set the randomly assigned card values to the model
             self.model.set_card_values(self.game_window.get_card_values())
-
+            self.model.init_scores()
             player_name, player_idx = self.model.get_player()
             self.game_window.show_player(player_name=player_name, player_idx=player_idx)
             # hide the start/root window
@@ -40,6 +40,8 @@ class Controller:
         self.main_window.deiconify()
         self.game_window.destroy()
         self.model.game_window_is_open = False
+        self.model.clean_round()
+        self.model.set_default()
 
     def set_difficulty_lvl(self, lvl):
         self.model.set_difficulty_level(lvl)
@@ -63,7 +65,8 @@ class Controller:
             self.game_window.update()
             if self.model.check_pair():
                 # pair found
-                self.update_scores()
+                player_name, player_idx = self.model.get_player()
+                self.update_scores(player_name=player_name, player_idx=player_idx)
                 self.game_window.deactivate_cards(self.model.get_temp_card_idx())
                 change_player = False
             else:
@@ -75,7 +78,9 @@ class Controller:
 
             self.model.clean_round()
             self.model.next_player(change_player)
-            if change_player and self.model.get_game_settings()["num_players"] > 1:
+
+            if change_player and self.model.get_game_setting()["num_players"] > 1:
+                # shows the next player wo is in turn for the next round
                 player_name, player_idx = self.model.get_player()
                 self.game_window.show_player(
                     player_name=player_name, player_idx=player_idx
@@ -86,5 +91,6 @@ class Controller:
             self.game_window.show_card(self.model.get_temp_card_idx())
             return
 
-    def update_scores(self):
-        pass
+    def update_scores(self, player_name, player_idx):
+        score = self.model.get_and_update_score(name=player_name)
+        self.game_window.update_player_score(player_idx=player_idx, score=score)
