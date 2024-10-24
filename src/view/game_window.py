@@ -1,4 +1,5 @@
 import tkinter as tk
+import tkinter.messagebox as messagebox
 import random
 
 
@@ -37,8 +38,11 @@ class GameWindow(tk.Toplevel):
 
         # set player names in another frame
         self.frame_players = tk.Frame(self)
+        self.lbl_players = []
         for i, player in enumerate(player_names):
-            tk.Label(self.frame_players, text=player).grid(row=i, column=0)
+            lbl = tk.Label(self.frame_players, text=player, font=("Arial", 20, "bold"))
+            self.lbl_players.append(lbl)
+            lbl.grid(row=i, column=0)
         self.frame_players.grid(row=2, column=0, sticky=tk.W)
 
         # ========================== Entries ============================
@@ -87,7 +91,7 @@ class GameWindow(tk.Toplevel):
 
     def show_card(self, idx_cards: list) -> None:
         # turn button into image
-        print(f"Show card with index: {idx_cards}")
+        # print(f"Show card with index: {idx_cards}")
         # show value of the card
         # change card text to image
         # TODO Later, I think it is different to handle the images, for now test it with values
@@ -102,3 +106,14 @@ class GameWindow(tk.Toplevel):
         for idx in idx_cards:
             self.cards[idx].config(state="disabled")
             # self.cards[idx].config(relief="sunken")
+
+    def show_player(self, player_name: str, player_idx: int) -> None:
+        # show the player name
+        messagebox.showinfo(title="Info", message=f"Player {player_name}'s turn")
+        # highlight the current player name
+        for i, lbl in enumerate(self.lbl_players):
+            # find the corresponding label on the grid to the player whose turn it is
+            if i == player_idx:
+                lbl.config(fg="green")
+            else:
+                lbl.config(fg="black")

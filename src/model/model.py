@@ -9,6 +9,7 @@ class Model:
         self.card_values = None
         self.count_open_cards = 0
         self.temp_card_idx = []
+        self.count_player = 0
 
     def set_difficulty_level(self, lvl: str):
         self.difficulty_level = lvl
@@ -55,3 +56,21 @@ class Model:
     def clean_round(self):
         self.temp_card_idx.clear()
         self.count_open_cards = 0
+
+    def get_player(self):
+        return (self.player_names[self.count_player], self.count_player)
+
+    def next_player(self, change_player: bool):
+        # current player has found a pair he can continue
+        if not change_player:
+            return
+        # max players len(self.player_names)
+        if len(self.player_names) == 1:
+            # only one player
+            self.count_player = 0
+        elif self.count_player == len(self.player_names) - 1:
+            # start from beginning
+            self.count_player = 0
+        else:
+            # take next player
+            self.count_player += 1

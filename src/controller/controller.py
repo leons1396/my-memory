@@ -10,6 +10,7 @@ class Controller:
         print("new controller")
         self.model = model
         self.main_window = main_window
+        self.game_start = True
 
     def start(self):
         self.main_window.create_start_window()
@@ -27,6 +28,8 @@ class Controller:
             # set the randomly assigned card values to the model
             self.model.set_card_values(self.game_window.get_card_values())
 
+            player_name, player_idx = self.model.get_player()
+            self.game_window.show_player(player_name=player_name, player_idx=player_idx)
             # hide the start/root window
             self.main_window.withdraw()
         else:
@@ -44,7 +47,8 @@ class Controller:
 
     def play_round(self, card_idx):
         print("Click on Card")
-        # check if the card is already open
+        # view players turn
+        # check if a card is already open
         if card_idx not in self.model.get_temp_card_idx():
             print("Set temp card idx")
             self.model.set_temp_card_idx(card_idx)
@@ -61,12 +65,22 @@ class Controller:
                 # pair found
                 self.update_scores()
                 self.game_window.deactivate_cards(self.model.get_temp_card_idx())
+                change_player = False
             else:
                 # no pair found
+                change_player = True
                 self.game_window.after(
-                    2000, self.game_window.close_cards(self.model.get_temp_card_idx())
+                    1000, self.game_window.close_cards(self.model.get_temp_card_idx())
                 )
+
             self.model.clean_round()
+            self.model.next_player(change_player)
+            if change_player and self.model.get_game_settings()["num_players"] > 1:
+                player_name, player_idx = self.model.get_player()
+                self.game_window.show_player(
+                    player_name=player_name, player_idx=player_idx
+                )
+
         else:
             # only one card is open, continue
             self.game_window.show_card(self.model.get_temp_card_idx())
