@@ -18,7 +18,14 @@ class Controller:
     def create_game_window(self):
         # make sure only one game window is open
         if not self.model.game_window_is_open:
+            # check the entered values
+            if not self.main_window.check_inputs():
+                print("There are some invalid inputs")
+                return
+
             print("Create game window")
+            # hide the start/root window
+            self.main_window.withdraw()
             # self = controller itself
             self.game_window = game_window.GameWindow(self, self.main_window)
             self.model.set_player_names(self.main_window.get_player_names_from_user())
@@ -30,8 +37,7 @@ class Controller:
             self.model.init_scores()
             player_name, player_idx = self.model.get_player()
             self.game_window.show_player(player_name=player_name, player_idx=player_idx)
-            # hide the start/root window
-            self.main_window.withdraw()
+
         else:
             print("Game window already exists")
 

@@ -82,8 +82,8 @@ class Model:
 
     def set_default(self):
         self.game_window_is_open = False
-        self.difficulty_level = None
-        self.player_names = None
+        # self.difficulty_level = None
+        # self.player_names = None
         self.card_values = None
         self.count_open_cards = 0
         self.temp_card_idx = []

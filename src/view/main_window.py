@@ -146,3 +146,25 @@ class MainWindow(tk.Tk):
             for txt_player in self.txt_players
             if txt_player.cget("state") == "normal"
         ]
+
+    def check_inputs(self):
+        # there must be at least one player name
+        for txt_player in self.txt_players:
+            if txt_player.cget("state") == "normal":
+                # if at least one player name is empty than show info
+                if txt_player.get() == "":
+                    messagebox.showinfo(
+                        title="Info", message="Please enter a name for each player"
+                    )
+                    return False
+
+        # at least one difficulty level must be selected
+        if all(
+            frame.cget("relief") == "raised" for frame in self.frame_btn_difficulties
+        ):
+            messagebox.showinfo(
+                title="Info", message="Please select a difficulty level"
+            )
+            return False
+        # all inputs are valid
+        return True
