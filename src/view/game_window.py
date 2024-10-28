@@ -1,6 +1,12 @@
 import tkinter as tk
 import tkinter.messagebox as messagebox
 import random
+from PIL import Image, ImageTk
+import os
+import sys
+
+sys.path.append("C:/Users/Leon/Documents/programming/my-memory")
+from src import secrets
 
 
 class GameWindow(tk.Toplevel):
@@ -15,9 +21,9 @@ class GameWindow(tk.Toplevel):
 
     def create_game_window(self, num_cards, num_players, player_names):
         # TODO may set the size based on the number of cards
-        self.geometry("1300x1300")
+        self.geometry("900x900")
         self.title("Playboard")
-
+        self.images = self.load_images()
         # ========================== Buttons ============================
         # close the application
         self.btn_quit = tk.Button(
@@ -66,6 +72,14 @@ class GameWindow(tk.Toplevel):
 
         # ========================== Entries ============================
 
+    def load_images(self):
+        imgs = []
+        src = secrets.SECRETS["PATH"]["IMG_RESIZED"]
+        for img in os.listdir(path=secrets.SECRETS["PATH"]["IMG_RESIZED"]):
+            pil_image = Image.open(os.path.join(src, img))
+            imgs.append(ImageTk.PhotoImage(pil_image))
+        return imgs
+
     def create_cards(self, num_cards):
         """Create the memory grid with the desired number of cards. The values for each
         card are randomly assigned. There are half as many unique values as cards, to
@@ -98,10 +112,11 @@ class GameWindow(tk.Toplevel):
                 text=f"Card{pos[3]}",
                 command=lambda card_idx=pos[3]: self.controller.play_round(card_idx),
             )
+
             # tuple(card, value)
             self.cards.append(card)
             self.card_values.append(pos[2])
-            card.grid(row=pos[0], column=pos[1], ipadx=60, ipady=60, padx=10, pady=5)
+            card.grid(row=pos[0], column=pos[1], ipadx=40, ipady=40, padx=10, pady=5)
 
         self.frame_cards.grid(row=1, column=0)
 
@@ -111,12 +126,15 @@ class GameWindow(tk.Toplevel):
         # show value of the card
         # change card text to image
         # TODO Later, I think it is different to handle the images, for now test it with values
+        # card values are numbers from 0 to num_cards/2. Card value corresponds to a image
+        # for idx in idx_cards:
+        #     self.cards[idx].config(text=f"'Image_{self.card_values[idx]}'")
         for idx in idx_cards:
-            self.cards[idx].config(text=f"'Image_{self.card_values[idx]}'")
+            self.cards[idx].config(image=self.images[self.card_values[idx]])
 
     def close_cards(self, idx_cards: list) -> None:
         for idx in idx_cards:
-            self.cards[idx].config(text=f"'Card_{idx}'")
+            self.cards[idx].config(text=f"'Card_{idx}'", image="")
 
     def deactivate_cards(self, idx_cards: list) -> None:
         for idx in idx_cards:

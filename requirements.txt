@@ -1,1 +1,5 @@
 ipykernel
+pillow
+pillow-heif
+opencv-python
+python-dotenv
