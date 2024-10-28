@@ -22,32 +22,54 @@ class MainWindow(tk.Tk):
         MAX_PLAYERS = 4
         NUM_DIFFICULTY_LEVELS = 3
         DIFFICULTY_LEVELS = ["easy", "medium", "hard"]
-        self.geometry("600x600")
+        self.geometry("500x500")
 
         # self.columnconfigure(4, weight=1)
-        self.rowconfigure(0, weight=1)
-        self.rowconfigure(4, weight=1)
-        self.rowconfigure(6, weight=1)
+        # self.rowconfigure(0, weight=1)
+        # self.rowconfigure(4, weight=1)
+        # self.rowconfigure(6, weight=1)
+        # Configure row and column weights to allow centering
+        # self.grid_rowconfigure(0, weight=1)
+        # self.grid_rowconfigure(1, weight=1)
+        # self.grid_rowconfigure(2, weight=1)
+        # self.grid_rowconfigure(3, weight=1)
+        # self.grid_columnconfigure(0, weight=1)
+        # self.grid_columnconfigure(2, weight=1)
+
+        # ========================== Frames ============================
+        self.frame_player_count = tk.Frame(self)
+        self.frame_players = tk.Frame(self)
+        self.frame_difficulties = tk.Frame(self)
+        self.frame_start_quit = tk.Frame(self)
 
         # ========================== Buttons ============================
-        self.btn_minus = tk.Button(self, text="-", command=self.decrease)
+        self.btn_minus = tk.Button(
+            self.frame_player_count, text="-", command=self.decrease
+        )
         self.btn_minus.grid(row=1, column=3)
 
-        self.btn_plus = tk.Button(self, text="+", command=self.increase)
+        self.btn_plus = tk.Button(
+            self.frame_player_count, text="+", command=self.increase
+        )
         self.btn_plus.grid(row=1, column=4)
 
         self.btn_start = tk.Button(
-            self, text="Start", command=self.controller.create_game_window
+            self.frame_start_quit,
+            text="Start",
+            command=self.controller.create_game_window,
+            bg="green",
         )
-        self.btn_start.grid(row=7, column=2, ipadx=20)
+        self.btn_start.grid(row=0, column=2, ipadx=20)
 
-        self.btn_quit = tk.Button(self, text="Quit", command=self.quit)
-        self.btn_quit.grid(row=8, column=2, ipadx=20)
+        self.btn_quit = tk.Button(
+            self.frame_start_quit, text="Quit", command=self.quit, bg="red"
+        )
+        self.btn_quit.grid(row=1, column=2, ipadx=20)
 
         # with a separate frame for each button you can highlight the selected button
         self.frame_btn_difficulties = [
             tk.Frame(
-                self,
+                self.frame_difficulties,
                 highlightthickness=2,
                 bd=0,
                 relief="raised",
@@ -56,7 +78,7 @@ class MainWindow(tk.Tk):
             for _ in range(NUM_DIFFICULTY_LEVELS)
         ]
         for i, frame in enumerate(self.frame_btn_difficulties, 1):
-            frame.grid(row=5, column=i)
+            frame.grid(row=0, column=i)
 
         self.btn_difficulties = [
             tk.Button(
@@ -70,26 +92,40 @@ class MainWindow(tk.Tk):
             btn.pack(fill="both", expand=True)
 
         # ========================== Labels ============================
-        self.lbl_title_num_players = tk.Label(self, text="Number of players")
+        self.lbl_title_num_players = tk.Label(
+            self.frame_player_count, text="Number of players"
+        )
         self.lbl_title_num_players.grid(row=1, column=0)
 
-        self.lbl_show_num_players = tk.Label(self, textvariable=self.lbl_num_players)
-        self.lbl_show_num_players.grid(row=1, column=1)
+        self.lbl_show_num_players = tk.Label(
+            self.frame_player_count, textvariable=self.lbl_num_players
+        )
+        self.lbl_show_num_players.grid(row=1, column=1, padx=10)
 
         self.lbl_players = [
-            tk.Label(self, text=f"Player {i}") for i in range(1, MAX_PLAYERS + 1)
+            tk.Label(self.frame_players, text=f"Player {i}", width=10)
+            for i in range(1, MAX_PLAYERS + 1)
         ]
         for i, lbl_player in enumerate(self.lbl_players, 0):
-            lbl_player.grid(row=2, column=i)
+            lbl_player.grid(row=0, column=i)
 
-        self.lbl_difficulty = tk.Label(self, text="Difficulty")
-        self.lbl_difficulty.grid(row=5, column=0)
+        self.lbl_difficulty = tk.Label(self.frame_difficulties, text="Difficulty")
+        self.lbl_difficulty.grid(row=0, column=0)
 
         # ========================== Entries ============================
-        self.txt_players = [tk.Entry(self) for i in range(MAX_PLAYERS)]
+        self.txt_players = [
+            tk.Entry(self.frame_players, width=12) for i in range(MAX_PLAYERS)
+        ]
         for i, txt_player in enumerate(self.txt_players, 0):
-            txt_player.grid(row=3, column=i)
+            txt_player.grid(row=1, column=i)
         self.update_player_from_board(count=int(self.lbl_num_players.get()))
+
+        # ========================== Grid ============================
+        self.frame_player_count.grid(row=0, column=0, sticky=tk.W)
+        self.frame_players.grid(row=1, column=0, sticky=tk.W, pady=30)
+        self.frame_difficulties.grid(row=2, column=0, sticky=tk.W, pady=30, padx=150)
+        self.frame_start_quit.grid(row=3, column=0, sticky=tk.W, pady=50, padx=225)
+        # center the frame_difficulties and frame_start_quit
 
     def increase(self):
         """Increase the number of players by 1 controlled by the plus button."""

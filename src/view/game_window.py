@@ -76,7 +76,7 @@ class GameWindow(tk.Toplevel):
         imgs = []
         src = secrets.SECRETS["PATH"]["IMG_RESIZED"]
         for img in os.listdir(path=secrets.SECRETS["PATH"]["IMG_RESIZED"]):
-            pil_image = Image.open(os.path.join(src, img))
+            pil_image = Image.open(os.path.join(src, img)).resize((128, 128))
             imgs.append(ImageTk.PhotoImage(pil_image))
         return imgs
 
@@ -111,12 +111,14 @@ class GameWindow(tk.Toplevel):
                 self.frame_cards,
                 text=f"Card{pos[3]}",
                 command=lambda card_idx=pos[3]: self.controller.play_round(card_idx),
+                # width=10,
+                # height=6,
             )
 
             # tuple(card, value)
             self.cards.append(card)
             self.card_values.append(pos[2])
-            card.grid(row=pos[0], column=pos[1], ipadx=40, ipady=40, padx=10, pady=5)
+            card.grid(row=pos[0], column=pos[1], ipadx=28, ipady=28, padx=5, pady=5)
 
         self.frame_cards.grid(row=1, column=0)
 
